@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advent of Code - Day 3 - Part 2</title>
+  </head>
+  <body>
+    <pre id="js-input"></pre>
+  </body>
+  <script>
+    const input = await fetch("https://adventofcode.com/2024/day/3/input").then(
+      (e) => e.text()
+    );
+
+    let sum = 0;
+    let skip = false
+    const commands = input.match(/mul\(\d*,\d*\)|don't\(\)|do\(\)+/g)
+
+    for (let index = 0; index < commands.length; index++) {
+      const command = commands[index];
+
+      if (command.startsWith('mul(')) {
+        if (!skip) {
+          const [operandA, operandB] = command.match(/(\d[\d0]*)/g).map(string => parseInt(string, 10))
+
+          sum += operandA * operandB
+        }
+      } else {
+        skip = command === "don't()"
+      }
+    }
+
+    console.log(sum)
+  </script>
+</html>

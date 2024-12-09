@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advent of Code - Day 5 - Part 1</title>
+  </head>
+  <body>
+    <canvas></canvas>
+  </body>
+  <script async type="module">
+    const input = await fetch("./inputs/day-5").then((e) => e.text()).then(e => e.split("\r\n"));
+
+    const por = input.slice(0, input.indexOf('')).map(e => e.split('|').map(e => parseInt(e, 10)))
+    const updates = input.slice(input.indexOf('') + 1).map(e => e.split(',').map(e => parseInt(e, 10)))
+
+    const checkUpdateValidity = u => u.every((page, index) => por.filter(r => r[0] === page).every(r => u.indexOf(r[1]) > index || u.indexOf(r[1]) === -1))
+
+    const output = updates.filter(u => checkUpdateValidity(u)).reduce((acc, curr) => acc + curr[Math.floor(curr.length / 2)], 0)
+
+    console.log(output)
+  </script>
+</html>

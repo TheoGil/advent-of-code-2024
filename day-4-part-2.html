@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advent of Code - Day 4 - Part 2</title>
+  </head>
+  <body>
+    <canvas></canvas>
+  </body>
+  <script async type="module">
+    const input = await fetch("./inputs/day-4").then((e) => e.text());
+
+    const rawRows = input.split("\n").map((e) => e.replace("\r", ""));
+
+    const grid = rawRows.map((string) => string.split(""));
+
+    const canvasEl = document.querySelector("canvas");
+
+    const ctx = canvasEl.getContext("2d");
+    const cellSize = 20;
+    const columnsCount = grid[0].length;
+    const rowsCount = grid.length;
+    canvasEl.width = columnsCount * cellSize;
+    canvasEl.height = rowsCount * cellSize;
+    ctx.strokeStyle = "black";
+
+    for (let x = 0; x < columnsCount; x++) {
+      for (let y = 0; y < rowsCount; y++) {
+        ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        ctx.fillText(grid[y][x], x * cellSize + 7, y * cellSize + 13);
+      }
+    }
+    //
+
+    let count = 0;
+
+    for (let y = 0; y < grid.length; y++) {
+      const row = grid[y];
+      for (let x = 0; x < row.length; x++) {
+        if (row[x] === "A") {
+          const topLeft = grid[y - 1]?.[x - 1];
+          const topRight = grid[y - 1]?.[x + 1];
+          const bottomLeft = grid[y + 1]?.[x - 1];
+          const bottomRight = grid[y + 1]?.[x + 1];
+
+          const dnwse =
+            (topLeft === "M" && bottomRight === "S") ||
+            (topLeft === "S" && bottomRight === "M");
+
+          const dswne =
+            (bottomLeft === "M" && topRight === "S") ||
+            (bottomLeft === "S" && topRight === "M");
+
+          if (dnwse && dswne) {
+            count++;
+            const color = `#${Math.floor(Math.random() * 16777215).toString(
+              16
+            )}90`;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+
+            ctx.moveTo(
+              (x - 1) * cellSize + cellSize / 2,
+              (y - 1) * cellSize + cellSize / 2
+            );
+            ctx.lineTo(
+              (x + 1) * cellSize + cellSize / 2,
+              (y + 1) * cellSize + cellSize / 2
+            );
+
+            ctx.moveTo(
+              (x - 1) * cellSize + cellSize / 2,
+              (y + 1) * cellSize + cellSize / 2
+            );
+            ctx.lineTo(
+              (x + 1) * cellSize + cellSize / 2,
+              (y - 1) * cellSize + cellSize / 2
+            );
+
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    console.log(count);
+  </script>
+</html>
