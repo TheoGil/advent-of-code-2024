@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advent of Code - Day 6 - Part 1</title>
+  </head>
+  <body></body>
+  <script async type="module">
+    const grid = await fetch("./inputs/day-6")
+      .then((e) => e.text())
+      .then((e) => e.split("\n").map((rowString) => rowString.split("")));
+
+    const guardStartY = grid.findIndex((row) => row.includes("^"));
+    const guardStartX = grid[guardStartY].indexOf("^");
+
+    const moveUpUntilObstacle = (startX, startY) => {
+      let y = startY;
+      let cell = grid[y][startX];
+      while (cell !== "#") {
+        y = y - 1;
+        console.log(y, grid[y][startX]);
+        let cell = grid[y][startX];
+      }
+      console.log(cell, startX, y);
+    };
+
+    console.log(grid);
+    console.log(guardStartX, guardStartY, grid[guardStartY][guardStartX]);
+
+    moveUpUntilObstacle(guardStartX, guardStartY);
+  </script>
+</html>
